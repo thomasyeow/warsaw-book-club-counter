@@ -1,14 +1,27 @@
 <!DOCTYPE html>
+<!--
+Hello, curious visitor. If you happen to be in Warsaw, Poland,
+I encourage you to check out the book club I made this github page for at
+https://www.facebook.com/groups/warsawbookclub
+
+No, I've never used the HTML/CSS/JS stack before. Is it obvious?
+-->
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+body{
+	background-color: gray;
+}
+h1{
+	background-color:white;
+}
 img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	width: 80%;
-	height: 25%;
+	max-width: 110vmin;
+	width: 100%;
 }
 .everything {
 	margin: auto;
@@ -17,18 +30,55 @@ img {
 }
 </style>
 </head>
-<body>
+<body onload="updateTimeToRead(0)">
 	<img src="Just kids.jpg" alt="Event Image">
 	<div class="everything">
 		<h1>Just Kids - Patty Smith</h1>
+		<p id="timeToReadStatement">
+		boop
+		</p>
+		<input type="range" min="0" max="100" value="0" class="slider" id="percentReadSlider">
+		<p><span id="percentRead">0</span>% of book read</p>
+		<p>Days left to event: <span id="daysLeft"></span>
 	</div>
 	
 </body>
 <script>
 //average words per minute according to some random site
-const AVG_WPM = 300
-//average words per page in current book
-const AVG_WPP = 423
+const AVG_WPM = 300;
+//total words in current book
+const TOTAL_WORDS = 84600;
+//date of event - REMEMBER MONTH'S IN DATE CLASS START FROM 0!!!
+const EVENT_DATE = new Date(2023, 2, 25);
 
+//SLIDER INTERACTION
+var slider = document.getElementById("percentReadSlider");
+slider.oninput = function(){
+updateTimeToRead(this.value);
+}
+
+//updates time to read in HTML
+function updateTimeToRead(percentRead){
+	if(percentRead == 100){
+	document.getElementById("percentRead").innerHTML = percentRead;
+	document.getElementById("timeToReadStatement").innerHTML
+	= "<i>the hell are you doing here??</i>";
+	return;
+	}
+	var timeToRead;
+	document.getElementById("percentRead").innerHTML = percentRead;
+	var daysToEvent = millisecondsToDays(EVENT_DATE.getTime() - Date.now());
+	var wordsLeft = Math.floor(TOTAL_WORDS*((100 - percentRead)/100));
+	timeToRead = Math.ceil(wordsLeft/AVG_WPM/daysToEvent);
+	document.getElementById("timeToReadStatement").innerHTML
+	="Daily reading to finish the book on time(if you start today): <h2><b><i>"+timeToRead+" minutes</b></i></h2>";
+	document.getElementById("daysLeft").innerHTML = daysToEvent;
+}
+
+//takes milliseconds, returns number of days(rounding up)
+function millisecondsToDays(arg){
+	return Math.ceil(arg/1000/60/60/24);
+}
+	
 </script>
 </html>
