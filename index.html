@@ -28,23 +28,37 @@ img {
 	text-align: center;
 	font-family: "Monaco", monospace;
 }
-
+.inputs {
+	clear: both;
+}
+#timeToReadStatement {
+	text-align:right;
+	float: right;
+}
+#totalTimeToReadStatement {
+	text-align: left;
+	float: left;
+}
 </style>
 </head>
 <body onload="updateTimeToRead(0)">
 	<img src="Just kids.jpg" alt="Event Image">
 	<div class="everything">
 		<h1>Just Kids - Patty Smith</h1>
-		<p id="timeToReadStatement">
-		boop
-		</p>
-		<label for="wpmInput">Your reading speed in WPM(words per minute)</label>
-		<input type="number" id="wpmInput" name="wpmInput" value=238 min="1"/>
-		<input type="button" value="Submit" onclick="updateWPM()"/>
-		<br>
-		<label for="percentReadSlider"><span id="percentRead">0</span>% of book read</label>
-		<input type="range" min="0" max="100" value="0" class="slider" id="percentReadSlider">
-		
+		<div id="timeToReadStatement">
+		Error
+		</div>
+		<div id="totalTimeToReadStatement">
+		Error
+		</div>
+		<div class="inputs">
+			<label for="wpmInput">Your reading speed in WPM(words per minute)</label>
+			<input type="number" id="wpmInput" name="wpmInput" value=238 min="1"/>
+			<input type="button" value="Submit" onclick="updateWPM()"/>
+			<br/>
+			<label for="percentReadSlider"><span id="percentRead">0</span>% of book read</label>
+			<input type="range" min="0" max="100" value="0" class="slider" id="percentReadSlider">
+		</div>
 		<p>Days left to event: <span id="daysLeft"></span>
 	</div>
 	
@@ -79,12 +93,20 @@ function updateTimeToRead(){
 	return;
 	}
 	var timeToRead;
+	var totalTimeToRead;
 	document.getElementById("percentRead").innerHTML = percentRead;
 	var daysToEvent = millisecondsToDays(EVENT_DATE.getTime() - Date.now());
 	var wordsLeft = Math.floor(TOTAL_WORDS*((100 - percentRead)/100));
 	timeToRead = Math.ceil(wordsLeft/wpm/daysToEvent);
+	totalTimeToRead = Math.ceil(wordsLeft/wpm);
+	
 	document.getElementById("timeToReadStatement").innerHTML
-	="Daily reading to finish the book on time(if you start today): <h3><b><i>"+timeToRead+" minutes</b></i></h3>";
+	= "Daily reading(if you start today): <h3><b><i>"
+	+ timeToRead + " minutes</b></i></h3>";
+	
+	document.getElementById("totalTimeToReadStatement").innerHTML
+	= "Total reading time: <h3><b><i>" + totalTimeToRead + " minutes</b></i></h3>";
+	
 	document.getElementById("daysLeft").innerHTML = daysToEvent;
 }
 
